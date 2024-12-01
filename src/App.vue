@@ -1,31 +1,29 @@
 <template>
-  <div dir="rtl" class="min-h-screen bg-gray-100 p-4">
-    <div class="">
-      <div class="float-left flex gap-4">
-        <!-- Add settings button -->
+  <div dir="rtl" class="min-h-screen bg-gray-100 dark:bg-gray-900 p-4 text-gray-900 dark:text-gray-100">
+    <div class="max-w-7xl mx-auto">
+      <div class="float-left flex gap-4 mb-4">
         <button @click="showSettingsModal = true" 
-                class="bg-gray-500 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600">
+                class="bg-gray-500 dark:bg-gray-600 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-600 dark:hover:bg-gray-700 transition">
           הגדרות
         </button>
-        <!-- File Upload -->
-        <input
-          type="file"
-          accept=".zip"
-          @change="handleFileUpload"
-          class="text-sm text-gray-500
-            file:mr-4 file:py-2 file:px-4
-            file:rounded-full file:border-0
-            file:text-sm file:font-semibold
-            file:bg-blue-50 file:text-blue-700
-            hover:file:bg-blue-100"
+        <input type="file"
+               accept=".zip"
+               @change="handleFileUpload"
+               class="text-sm text-gray-600 dark:text-gray-300
+                      file:mr-4 file:py-2 file:px-4
+                      file:rounded-lg file:border-0
+                      file:text-sm file:font-semibold
+                      file:bg-blue-500 file:text-white
+                      dark:file:bg-blue-600
+                      hover:file:bg-blue-600 dark:hover:file:bg-blue-700
+                      file:transition"
         >
         <button @click="showProductsModal = true" 
-                class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 float-left">
+                class="bg-blue-500 dark:bg-blue-600 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600 dark:hover:bg-blue-700 transition">
           ניהול טבלת המוצרים
         </button>
       </div>
-      <!-- Open Products Modal -->
-      <h1 class="text-3xl font-bold text-gray-800 mb-6">ניתוח צ'אט קיוסק דירה</h1>
+      <h1 class="text-4xl font-bold mb-8">ניתוח צ'אט קיוסק דירה</h1>
       
       <!-- Products Modal -->
       <ProductsModal 
@@ -50,7 +48,9 @@
             </label>
             <select 
               v-model="selectedAuthor"
-              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm 
+                     focus:border-blue-500 focus:ring-blue-500
+                     bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 cursor-pointer">
             >
               <option value="">כולם, ללא סינון</option>
               <option v-for="author in authors" :key="author" :value="author">
@@ -62,22 +62,32 @@
           <!-- Date Range Filter -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">
-              תאריך התחלה
+              תאריך התחלה:
             </label>
             <input
               type="date"
               v-model="dateRange.start"
-              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm 
+                     focus:border-blue-500 focus:ring-blue-500
+                     bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100
+                     [&::-webkit-calendar-picker-indicator]:cursor-pointer
+                     [&::-webkit-calendar-picker-indicator]:dark:filter
+                     [&::-webkit-calendar-picker-indicator]:dark:invert"
             >
           </div>
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1">
-              תאריך סיום
+              תאריך סיום:
             </label>
             <input
               type="date"
               v-model="dateRange.end"
-              class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+              class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm 
+                     focus:border-blue-500 focus:ring-blue-500
+                     bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100
+                     [&::-webkit-calendar-picker-indicator]:cursor-pointer
+                     [&::-webkit-calendar-picker-indicator]:dark:filter
+                     [&::-webkit-calendar-picker-indicator]:dark:invert"
             >
           </div>
         </div>
@@ -85,21 +95,20 @@
 
       <!-- Author Totals -->
       <div v-if="Object.keys(authorTotals).length" class="sticky top-0 bg-white rounded-lg shadow p-2 mb-2">
-        <h2 class="text-xl font-semibold mb-1">חישוב כללי:</h2>
+        <h2 class="text-xl font-semibold text-gray-700 mb-1">חישוב כללי:</h2>
         <div class="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-4 gap-1">
           <div v-for="(total, author) in authorTotals" :key="author" class="flex justify-between items-center p-1 border rounded">
-            <span class="font-medium">{{ author }}</span>
+            <span class="font-medium text-gray-600">{{ author }}</span>
             <span class="text-gray-600">₪{{ total.toFixed(2) }}</span>
           </div>
         </div>
       </div>
 
       <!-- Messages Display -->
-      <div v-if="filteredMessages.length" class="bg-white rounded-lg shadow p-2">
+      <div v-if="filteredMessages.length" class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4">
         <div v-for="(message, index) in filteredMessages" :key="index" 
-          class="mb-2 p-2 rounded-lg" 
-          :class="message.author === selectedAuthor ? 'bg-blue-50' : 'bg-gray-50'"
-        >
+             class="mb-4 p-3 rounded-lg" 
+             :class="message.author === selectedAuthor ? 'bg-blue-50 dark:bg-blue-900/30' : 'bg-gray-50 dark:bg-gray-700/30'">
           <div class="text-sm text-gray-500">
             {{ formatDateTime(message.datetime) }} - <strong>{{ message.author }}</strong>
             <span v-if="message.isEdited" 
@@ -113,7 +122,7 @@
               </svg>
             </span>
           </div>
-          <div v-if="message.isMedia" class="text-blue-600">
+          <div v-if="message.isMedia" class="text-blue-600 dark:text-blue-400">
             <div v-if="message.mediaUrl">
               <!-- Image preview -->
               <img v-if="message.mediaType === 'image'" 
@@ -144,7 +153,7 @@
 
               <!-- Product Price Display and Edit -->
               <div v-if="getProductWholePriceFromText(text) !== null" 
-                   class="flex items-center justify-end gap-2 min-w-[80px] text-sm">
+                   class="flex items-center justify-end gap-2 min-w-[120px] text-sm">
                 <button
                   v-if="getProductWholePriceFromText(text) === 0 && getProductFromText(text).valid"
                   @click="markProductAsInvalid(getProductFromText(text))"
@@ -154,7 +163,8 @@
                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm0-2a6 6 0 100-12 6 6 0 000 12zm0-5a1 1 0 011-1h1a1 1 0 011 1v1a1 1 0 01-1 1h-1a1 1 0 01-1-1v-1zm0-8a1 1 0 011-1h1a1 1 0 011-1V7a1 1 0 01-1-1h-1a1 1 0 01-1 1v1z" clip-rule="evenodd" />
                   </svg>
                 </button>
-                <span class="text-gray-600" :class="{ 'line-through text-gray-300': !getProductFromText(text).valid }">
+                <span class="text-gray-600 dark:text-gray-300" 
+                      :class="{ 'line-through text-gray-300 dark:text-gray-600': !getProductFromText(text).valid }">
                   <span v-if="getProductQuantityFromText(text) > 1">
                     (₪{{ getProductOneUnitPriceFromText(text) }} ליח' * {{ getProductQuantityFromText(text) }}) <strong>₪{{ getProductWholePriceFromText(text) }}</strong>
                   </span>
@@ -216,8 +226,8 @@
     </div>
 
     <div v-if="quickEditProduct !== null"
-     class="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-  <div class="bg-white rounded-lg p-4 shadow-xl max-w-sm w-full mx-4">
+     class="fixed inset-0 bg-black/50 dark:bg-black/70 flex items-center justify-center z-50">
+  <div class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-xl max-w-sm w-full mx-4">
     <h3 class="text-lg font-medium mb-4">עדכון מחיר {{ quickEditProduct.name }}</h3>
     <div class="flex gap-2 items-center">
       <input 
@@ -377,7 +387,7 @@ const handleProductUpdate = async (product) => {
 // Replace the dateRange initialization with settings-based initialization
 onMounted(async () => {
   const settings = getSettings();
-  dateRange.value.start = settings.defaultStartDate || new Date().toISOString().split('T')[0];
+  dateRange.value.start = settings.defaultStartDate || '';
   dateRange.value.end = settings.defaultEndDate || '';
   
   await initDB()
