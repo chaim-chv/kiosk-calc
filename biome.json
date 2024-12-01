@@ -1,0 +1,23 @@
+{
+  "linter": {
+    "rules": {
+      "all": true,
+      "complexity": {
+        "all": true,
+        "noForEach": "off",
+        "noStaticOnlyClass": "off"
+      },
+      "suspicious": {
+        "all": true,
+        "noAsyncPromiseExecutor": "off",
+        "noConsole": "off",
+        "noConsoleLog": "off",
+        "useAwait": "off"
+      },
+      "correctness": {
+        "all": false,
+        "recommended": true
+      }
+    }
+  }
+}
